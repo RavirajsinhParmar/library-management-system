@@ -4,28 +4,31 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  orderBy,
   query,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { useStateValue } from "../../StateProvider";
 interface list {
   id: string;
   [key: string]: string;
 }
 const BooksList = () => {
   const [booksList, setBooksList] = useState<list[]>([]);
-
+  const [sortBy, setSortBy] = useState("desc");
+  const [data, dispatch] = useStateValue();
   const handleDelete = async (id: string) => {
     const taskDocRef = doc(db, "books", id);
     try {
       await deleteDoc(taskDocRef);
-      console.log('deleted successfully')
+      console.log("deleted successfully");
     } catch (err) {
       alert(err);
     }
   };
 
   useEffect(() => {
-    const q = query(collection(db, "books"));
+    const q = query(collection(db, "books"), orderBy("created", 'desc'));
     onSnapshot(q, (querySnapshot) => {
       const list: list[] = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -34,8 +37,33 @@ const BooksList = () => {
       setBooksList(list);
     });
   }, []);
+  
+  useEffect(() => {
+    if(sortBy == 'asc') {
+      setBooksList(booksList.sort((a: any, b: any) => b.created - a.created));
+    } else {
+      setBooksList(booksList.sort((a: any, b: any) => a.created - b.created));
+    }
+  }, [sortBy])
+  
   return (
     <div className="relative overflow-x-auto">
+      <div className="flex justify-start gap-2 py-4">
+        <button
+          onClick={() => setSortBy("asc")}
+          className="border border-gray-300 p-2 rounded-lg"
+          type="button"
+        >
+          Asc
+        </button>
+        <button
+          onClick={() => setSortBy("desc")}
+          className="border border-gray-300 p-2 rounded-lg"
+          type="button"
+        >
+          Desc
+        </button>
+      </div>
       <table className="w-full border rounded-lg border-gray-300 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-900 uppercase dark:text-gray-400">
           <tr className="border-b border-gray-300">
@@ -81,6 +109,16 @@ const BooksList = () => {
                     <button
                       type="button"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      onClick={() => {
+                        dispatch({
+                          type: "GET_BOOK_DETAILS",
+                          selectedBook: book,
+                        });
+                        dispatch({
+                          type: "ADD_BOOK_FORM_VISIBLE",
+                          isAddBookFormVisible: true,
+                        });
+                      }}
                     >
                       Edit
                     </button>

@@ -3,7 +3,8 @@ import { Form, Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import Input from "../../Common/Input";
 import { db } from "../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { useStateValue } from "../../StateProvider";
 
 interface Values {
   title: string;
@@ -12,6 +13,8 @@ interface Values {
   publishedYear: string;
 }
 const AddBook = () => {
+  const [data, dispatch] = useStateValue();
+  const { selectedBook } = data;
   const validationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     author: yup.string().required("Author is required"),
@@ -24,9 +27,28 @@ const AddBook = () => {
     { setSubmitting, resetForm }: FormikHelpers<Values>
   ) => {
     try {
-      await addDoc(collection(db, "books"), {
-        ...values,
-        created: new Date(),
+      if (selectedBook?.id) {
+        const taskDocRef = doc(db, "books", selectedBook?.id);
+        try {
+          await updateDoc(taskDocRef, {
+            ...values,
+          });
+          dispatch({
+            type: "GET_BOOK_DETAILS",
+            selectedBook: null,
+          });
+        } catch (err) {
+          alert(err);
+        }
+      } else {
+        await addDoc(collection(db, "books"), {
+          ...values,
+          created: new Date(),
+        });
+      }
+      dispatch({
+        type: "ADD_BOOK_FORM_VISIBLE",
+        isAddBookFormVisible: !data.isAddBookFormVisible,
       });
       setSubmitting(false);
       resetForm();
@@ -39,11 +61,12 @@ const AddBook = () => {
       <div className="!text-3xl font-semibold">Add new book</div>
       <Formik
         initialValues={{
-          title: "",
-          author: "",
-          genre: "",
-          publishedYear: "",
+          title: selectedBook?.title || "",
+          author: selectedBook?.author || "",
+          genre: selectedBook?.genre || "",
+          publishedYear: selectedBook?.publishedYear || "",
         }}
+        enableReinitialize
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
@@ -96,7 +119,7 @@ const AddBook = () => {
               type="submit"
               form="add-book-form"
             >
-              Add
+              {selectedBook?.id ? "Update" : "Create"}
             </button>
           </Form>
         )}

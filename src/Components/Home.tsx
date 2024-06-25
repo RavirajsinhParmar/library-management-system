@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import BooksList from "./BooksList/BooksList";
 import AddBook from "./AddNewBook/AddBook";
+import { useStateValue } from "../StateProvider";
 
-type Props = {};
-
-const Home = (props: Props) => {
-  const [isAddbookFormVisible, setIsAddbookFormVisible] = useState(false);
+const Home = () => {
+  const [user, dispatch] = useStateValue();
   return (
     <div className="m-auto p-4">
       <div className="flex justify-between">
@@ -16,13 +15,16 @@ const Home = (props: Props) => {
           type="button"
           className="h-max py-2 px-3 text-white text-base font-medium bg-blue-500 rounded-lg"
           onClick={() => {
-            setIsAddbookFormVisible(!isAddbookFormVisible);
+            dispatch({
+              type: "ADD_BOOK_FORM_VISIBLE",
+              isAddBookFormVisible: !user.isAddBookFormVisible,
+            });
           }}
         >
           + Add
         </button>
       </div>
-      {isAddbookFormVisible && <AddBook />}
+      {user?.isAddBookFormVisible && <AddBook />}
       <BooksList />
     </div>
   );

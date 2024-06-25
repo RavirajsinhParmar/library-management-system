@@ -5,6 +5,7 @@ import * as yup from "yup";
 import Input from "../../Common/Input";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
+import { useStateValue } from "../../StateProvider";
 const Background = require("../../Assets/Background_img.jpg");
 
 interface Values {
@@ -13,6 +14,7 @@ interface Values {
 }
 
 const Login = () => {
+  const [{ data }, dispatch] = useStateValue()
   const navigate = useNavigate();
   let validationSchema = yup.object().shape({
     email: yup.string().required("Email is required"),
@@ -27,6 +29,10 @@ const Login = () => {
           "token",
           await userCredential?.user?.getIdToken()
         );
+        dispatch({
+          type: 'SET_USER',
+          user: userCredential?.user
+        })
         navigate("/home");
       })
       .catch((error) => alert(error));
