@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
   return (
-    <nav className="absolute w-full top-0 z-10">
+    <nav className="absolute z-[9999] w-full top-0">
       <div className="mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           <span className="text-2xl text-gray-900 font-semibold">

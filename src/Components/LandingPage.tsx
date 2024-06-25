@@ -6,7 +6,6 @@ const Landing = () => {
   return (
     <div className="relative">
       <Header />
-
       <div className="w-screen p-[75px] h-screen fixed flex font-bold justify-center z-[999] items-center text-white text-4xl">
         <Typewriter
           options={{
