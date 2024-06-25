@@ -3,8 +3,8 @@ import BooksList from "./BooksList/BooksList";
 import AddBook from "./AddNewBook/AddBook";
 import { useStateValue } from "../StateProvider";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 // const Background = require("../Assets/Listpage_bg.jpg");
 
 const Home = () => {

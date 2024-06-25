@@ -7,9 +7,9 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { db } from "../../firebase";
 import { useStateValue } from "../../StateProvider";
 import Pagination from "./Pagination";
+import { db } from "../../firebase";
 interface list {
   id: string;
   [key: string]: string;

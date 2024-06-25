@@ -2,9 +2,9 @@ import React from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import Input from "../../Common/Input";
-import { db } from "../../firebase";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { useStateValue } from "../../StateProvider";
+import { db } from "../../firebase";
 
 interface Values {
   title: string;

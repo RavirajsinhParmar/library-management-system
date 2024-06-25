@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import Input from "../../Common/Input";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
 import { useStateValue } from "../../StateProvider";
+import { auth } from "../../firebase";
 const Background = require("../../Assets/Background_img.jpg");
 
 interface Values {
