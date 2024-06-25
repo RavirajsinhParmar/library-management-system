@@ -9,17 +9,18 @@ type Props = {
   name: string;
   placeholder: string;
   type?: string;
+  className?: string;
 };
 
 const Input = (props: Props) => {
-  const { errors, touched, label, id, name, placeholder, type } = props;
+  const { errors, touched, label, id, name, placeholder, type, className } = props;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex text-base flex-col gap-2">
       <label className="text-left" htmlFor="email">
         {label}
       </label>
       <Field
-        className="bg-transparent border border-white p-2 rounded-lg"
+        className={`${className} bg-transparent min-w-[250px] border border-white p-2 rounded-lg`}
         id={id}
         name={name}
         placeholder={placeholder}
