@@ -1,11 +1,11 @@
 import React from "react";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import Input from "../../Common/Input";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../firebase";
 const Background = require("../../Assets/Background_img.jpg");
-
-type Props = {};
 
 interface Values {
   fullName: string;
@@ -13,13 +13,27 @@ interface Values {
   email: string;
 }
 
-const Signup = (props: Props) => {
+const Signup = () => {
   const navigate = useNavigate();
   let validationSchema = yup.object().shape({
     fullName: yup.string().required("Full name is required"),
     email: yup.string().required("Email is required"),
     password: yup.string().required("password is required"),
   });
+
+  const Signup = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const { fullName, email, password } = values;
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async ({ user }) => {
+        updateProfile(user, { displayName: fullName });
+        sessionStorage.setItem("token", await user?.getIdToken());
+        navigate("/home");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    setSubmitting(false);
+  };
 
   return (
     <div className="h-screen">
@@ -36,15 +50,7 @@ const Signup = (props: Props) => {
             password: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(
-            values: Values,
-            { setSubmitting }: FormikHelpers<Values>
-          ) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 500);
-          }}
+          onSubmit={Signup}
         >
           {({ errors, touched }) => (
             <Form
