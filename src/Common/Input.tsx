@@ -10,14 +10,25 @@ type Props = {
   placeholder: string;
   type?: string;
   className?: string;
+  isRequired?: boolean;
 };
 
 const Input = (props: Props) => {
-  const { errors, touched, label, id, name, placeholder, type, className } = props;
+  const {
+    errors,
+    touched,
+    label,
+    id,
+    name,
+    placeholder,
+    type,
+    className,
+    isRequired,
+  } = props;
   return (
     <div className="flex text-base flex-col gap-2">
       <label className="text-left" htmlFor="email">
-        {label}
+        {label} {isRequired && <span className="text-red-600">*</span>}
       </label>
       <Field
         className={`${className} bg-transparent min-w-[250px] border border-white p-2 rounded-lg`}
@@ -27,7 +38,7 @@ const Input = (props: Props) => {
         type={type}
       />
       {errors?.[name] && touched?.[name] ? (
-        <div className="text-base font-semibold text-red-700 text-left">
+        <div className="text-sm font-medium text-red-600 text-left">
           {errors?.[name]}
         </div>
       ) : null}

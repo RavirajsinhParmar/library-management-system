@@ -42,6 +42,13 @@ const Signup = () => {
         alt="bg-img"
         src={Background}
       />
+      <div className="z-[999] right-0 cursor-pointer absolute object-cover" onClick={() => navigate("/")}>
+        <img
+          className="h-7 w-7 m-4"
+          alt="bg-img"
+          src={"/images/home.svg"}
+        />
+      </div>
       <div className="relative flex-col gap-4 h-full text-lg text-white z-9 flex justify-center items-center">
         <Formik
           initialValues={{
@@ -55,7 +62,7 @@ const Signup = () => {
           {({ errors, touched }) => (
             <Form
               id="signup-form"
-              className="min-w-[400px] z-10 bg-white backdrop-filter backdrop-blur-lg bg-opacity-15 flex flex-col border border-gray-300 rounded-lg p-8 gap-3"
+              className="min-w-[400px] z-10 bg-[#ffeeff] backdrop-filter backdrop-blur-lg bg-opacity-10 flex flex-col border border-gray-300 rounded-lg p-8 gap-3"
             >
               <div className="!text-3xl mb-2 font-semibold">Signup</div>
               <Input

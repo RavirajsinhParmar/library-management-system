@@ -5,6 +5,7 @@ import { useStateValue } from "../StateProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+// const Background = require("../Assets/Listpage_bg.jpg");
 
 const Home = () => {
   const [user, dispatch] = useStateValue();
@@ -22,28 +23,17 @@ const Home = () => {
       .catch((error) => alert(error));
   };
   return (
-    <div className="m-auto p-4">
+    <div className="m-auto p-4 h-screen bg-gradient-to-l from-gray-200 via-fuchsia-200 to-stone-100">
       <div className="flex justify-between">
-        <div className="text-2xl font-bold py-3 flex items-start">
+        <div className="text-2xl font-bold py-3 flex gap-3 items-start">
+          <img alt="logo" src={"/book.svg"} width={28} height={28} />
           List of books
         </div>
         <div className="flex gap-3 items-center">
-          <button
-            type="button"
-            className="h-max py-2 px-3 text-white text-base font-medium bg-blue-500 rounded-lg"
-            onClick={() => {
-              dispatch({
-                type: "ADD_BOOK_FORM_VISIBLE",
-                isAddBookFormVisible: !user.isAddBookFormVisible,
-              });
-            }}
-          >
-            + Add
-          </button>
           <div className="cursor-pointer" onClick={SignOut}>
             <img
               alt=""
-              src={"/logout.svg"}
+              src={"/images/logout.svg"}
               width={30}
               height={30}
               className="fill-black"
